@@ -10,7 +10,7 @@ CORS(app)
 def return_home():
     return jsonify({
         "message": "Hello from Flask!",
-        "people": ["Harry", "Jack", "Barry"]
+        "people": ["Test", "Test2", "Test3"]
     })
 
 if __name__ == "__main__":
