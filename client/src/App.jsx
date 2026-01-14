@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import "./App.css";
 
 function App() {
   const [header, setHeader] = useState("Loading...");
   const [jobs, setJobs] = useState([]);
+  const [formData, setFormData] = useState({
+    role: '',
+    company: '',
+    salary: ''
+  });
 
   useEffect(() => {
     fetch("/api/home")
@@ -14,8 +19,48 @@ function App() {
       });
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,        
+      [name]: value       
+    }));
+  };
+
   return (
     <div className="container">
+      <form>
+        <input 
+          type="text" 
+          name="role" 
+          value={formData.role} 
+          placeholder="Role" 
+          onChange={handleChange}
+        />
+        <br />
+
+        <input 
+          type="text" 
+          name="company" 
+          value={formData.company} 
+          placeholder="Company" 
+          onChange={handleChange}
+        />
+        <br />
+
+        <input 
+          type="text" 
+          name="salary" 
+          value={formData.salary} 
+          placeholder="Salary" 
+          onChange={handleChange}
+        />
+        <br />
+        
+        <button>Save</button>
+      </form>
+
       <h1 className="dashboard-title">{header}</h1>
 
       <div className="job-grid">
