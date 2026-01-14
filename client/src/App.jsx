@@ -28,9 +28,26 @@ function App() {
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault() // Stop form refresh
+
+    const newJob = {
+        id: jobs.length + 1,
+        role: formData.role,
+        company: formData.company,
+        salary: formData.salary,
+        status: "Applied",     
+        date: new Date().toLocaleDateString()
+    }
+
+    setJobs(prevJobs => [...prevJobs, newJob]) 
+
+    setFormData({ role: "", company: "", salary: "" }); 
+  }
+
   return (
     <div className="container">
-      <form>
+      <form onSubmit={handleSubmit}>
         <input 
           type="text" 
           name="role" 
@@ -57,7 +74,7 @@ function App() {
           onChange={handleChange}
         />
         <br />
-        
+
         <button>Save</button>
       </form>
 
