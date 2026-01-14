@@ -2,28 +2,37 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-
-  const [message, setMessage] = useState("Loading...");
-  const [people, setPeople] = useState([]);
+  const [header, setHeader] = useState("Loading...");
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-    fetch("/api/home") 
+    fetch("/api/home")
       .then((response) => response.json())
       .then((data) => {
-        setMessage(data.message); 
-        setPeople(data.people);   
+        setHeader(data.message);
+        setJobs(data.jobs); 
       });
-  }, []); 
+  }, []);
 
   return (
-    <div>
-      <h1>Job Hunter Dashboard</h1>
-      <p>Server says: {message}</p>
-      
-      <h2>People List:</h2>
-      {people.map((person, index) => (
-        <div key={index}>{person}</div>
-      ))}
+    <div className="container">
+      <h1 className="dashboard-title">{header}</h1>
+
+      <div className="job-grid">
+        {jobs?.map((job) => (
+          <div key={job.id} className="job-card">
+            <div className="card-header">
+              <span className="role">{job.role}</span>
+              <span className={`status ${job.status.toLowerCase()}`}>
+                {job.status}
+              </span>
+            </div>
+            <h3 className="company">{job.company}</h3>
+            <p className="salary">Job Salary: {job.salary}</p>
+            <p className="date">Applied: {job.date}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
