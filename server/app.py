@@ -18,7 +18,8 @@ class Job(db.Model):
     date = db.Column(db.String(50), nullable=False)
     salary = db.Column(db.String(50), nullable=False)
 
-    # Helper function to convert python to JSON
+    # Jsonify cannot handle the internal state of an SQLAlchemy object
+    # so it needs to converted into a dictionary first
     def to_json(self):
         return {
             "id": self.id,
@@ -47,8 +48,8 @@ def add_job():
     new_job = Job(
         role=data['role'], 
         company=data['company'], 
-        status="Applied", 
-        date="2024-01-25", 
+        status="Applied",  # Default status until I build the status selector
+        date="2024-01-25", # TODO: Replace with dynamic date.today()
         salary=data.get('salary', 'N/A')
     )
     
@@ -56,6 +57,10 @@ def add_job():
     db.session.commit()     
     
     return jsonify(new_job.to_json()), 201
+
+@app.route("/api/jobs", methods=['DELETE'])
+def delete_job():
+    pass
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
