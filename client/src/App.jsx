@@ -11,13 +11,19 @@ function App() {
   });
 
   useEffect(() => {
-    fetch("/api/home")
-      .then((response) => response.json())
-      .then((data) => {
-        setHeader(data.message);
-        setJobs(data.jobs); 
-      });
-  }, []);
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch("/api/jobs");
+        const data = await response.json();
+        setJobs(data);
+        setHeader("Jobs Dashboard")
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+  };
+
+  fetchJobs();
+}, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,22 +34,38 @@ function App() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault() // Stop form refresh
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const newJob = {
-        id: jobs.length + 1,
-        role: formData.role,
-        company: formData.company,
-        salary: formData.salary,
-        status: "Applied",     
-        date: new Date().toLocaleDateString()
+    const jobData = {
+      role: formData.role,
+      company: formData.company,
+      salary: formData.salary
+    };
+
+    try {
+      const response = await fetch("api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobData), 
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      setJobs((prevJobs) => [...prevJobs, data]);
+      
+      setFormData({ role: "", company: "", salary: "" });
+
+    } catch (error) {
+      console.error("Error saving job:", error);
     }
-
-    setJobs(prevJobs => [...prevJobs, newJob]) 
-
-    setFormData({ role: "", company: "", salary: "" }); 
-  }
+    };
 
   return (
     <div className="container">
