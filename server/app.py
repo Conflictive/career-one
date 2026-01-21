@@ -74,5 +74,22 @@ def delete_job(job_id):
 
     return jsonify({"message": "Job deleted successfully"}), 200
 
+@app.route("/api/jobs/<int:job_id>" , methods=['PATCH'])
+def update_job(job_id):
+    data = request.json
+
+    job_to_update = db.session.get(Job, job_id)
+    new_status = data.get("status")
+
+    if (job_to_update == None):
+        return jsonify({"error": "Job not found"}), 404
+    
+    job_to_update.status = new_status
+
+    db.session.commit()
+
+    return jsonify({"message": "Job status updated successfully"}), 200
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

@@ -23,7 +23,7 @@ function App() {
     fetchJobs();
   }, []);
 
-  const onDelete = async (id) =>  {
+  const deleteJob = async (id) =>  {
     const url = "/api/jobs/" + id
     
     try {
@@ -43,6 +43,40 @@ function App() {
     }
     };
 
+  const updateJob = async (id, newStatus) => {
+    const updateData = {
+      status: newStatus
+    };
+
+    const url = "/api/jobs/" + id
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData), 
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      setJobs((prevJobs) => prevJobs.map((job) => {
+        if (job.id === id) {
+          return {...job, status: newStatus}
+        } else {
+          return job
+        }
+      }));
+    } catch (error) {
+      console.error("Error updating job:", error);
+    }
+    };  
+
 
   return (
     <div className="container">
@@ -52,7 +86,7 @@ function App() {
 
       <div className="job-grid"> 
       {jobs?.map(job => {
-          return <JobCard key={job.id} jobData={job} onDelete={onDelete}/>;
+          return <JobCard key={job.id} jobData={job} onDelete={deleteJob} onUpdate={updateJob}/>;
       })}
       </div>
     </div>
