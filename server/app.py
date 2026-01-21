@@ -82,7 +82,7 @@ def update_job(job_id):
     job_to_update = db.session.get(Job, job_id)
     new_status = data.get("status")
 
-    if (job_to_update == None):
+    if job_to_update is None:
         return jsonify({"error": "Job not found"}), 404
     
     job_to_update.status = new_status
@@ -90,6 +90,15 @@ def update_job(job_id):
     db.session.commit()
 
     return jsonify({"message": "Job status updated successfully"}), 200
+
+@app.route("/api/jobs/<int:job_id>", methods=['GET'])
+def get_job_by_id(job_id):
+    job = db.session.get(Job, job_id)
+
+    if job is None:
+        return jsonify({"Error": "Job not found"}), 404
+    
+    return jsonify(job.to_json())
 
 
 if __name__ == "__main__":
