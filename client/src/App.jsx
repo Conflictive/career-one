@@ -20,8 +20,29 @@ function App() {
       }
   };
 
-  fetchJobs();
-}, []);
+    fetchJobs();
+  }, []);
+
+  const onDelete = async (id) =>  {
+    const url = "/api/jobs/" + id
+    
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      setJobs(prevJobs => prevJobs.filter(job => job.id !== id));
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
+    };
+
 
   return (
     <div className="container">
@@ -29,10 +50,9 @@ function App() {
 
       <h1 className="dashboard-title">{header}</h1>
 
-      <div className="job-grid"> {/* The Grid Container goes HERE */}
+      <div className="job-grid"> 
       {jobs?.map(job => {
-          console.log(job);
-          return <JobCard key={job.id} jobData={job} />;
+          return <JobCard key={job.id} jobData={job} onDelete={onDelete}/>;
       })}
       </div>
     </div>

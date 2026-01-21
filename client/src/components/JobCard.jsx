@@ -1,6 +1,10 @@
-function JobCard ({ jobData }) {
+function JobCard ({ jobData, onDelete}) {
     return (
           <div className="job-card">
+            <button className="delete-btn" onClick={() => onDelete(jobData.id)}>
+                &times; 
+            </button>
+
             <div className="card-header">
               <span className="role">{jobData.role}</span>
               <span className={`status ${jobData.status.toLowerCase()}`}>
