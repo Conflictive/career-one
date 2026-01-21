@@ -6,6 +6,7 @@ import JobCard from "./components/JobCard";
 function App() {
   const [header, setHeader] = useState("Loading...");
   const [jobs, setJobs] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   
 
   useEffect(() => {
@@ -14,7 +15,7 @@ function App() {
         const response = await fetch("/api/jobs");
         const data = await response.json();
         setJobs(data);
-        setHeader("Jobs Dashboard")
+        setHeader("Jobs Dashboard");
       } catch (error) {
         console.error("Error fetching jobs:", error);
       }
@@ -24,7 +25,7 @@ function App() {
   }, []);
 
   const deleteJob = async (id) =>  {
-    const url = "/api/jobs/" + id
+    const url = "/api/jobs/" + id;
     
     try {
       const response = await fetch(url, {
@@ -41,14 +42,14 @@ function App() {
     } catch (error) {
       console.error("Error deleting job:", error);
     }
-    };
+  };
 
   const updateJob = async (id, newStatus) => {
     const updateData = {
       status: newStatus
     };
 
-    const url = "/api/jobs/" + id
+    const url = "/api/jobs/" + id;
 
     try {
       const response = await fetch(url, {
@@ -67,16 +68,24 @@ function App() {
 
       setJobs((prevJobs) => prevJobs.map((job) => {
         if (job.id === id) {
-          return {...job, status: newStatus}
+          return {...job, status: newStatus};
         } else {
-          return job
+          return job;
         }
       }));
     } catch (error) {
       console.error("Error updating job:", error);
     }
-    };  
+  };  
 
+  const filteredJobs = jobs?.filter((job) => {
+    const cleanSearch = searchTerm.toLowerCase();
+
+    const matchesCompany = job.company.toLowerCase().includes(cleanSearch);
+    const matchesRole = job.role.toLowerCase().includes(cleanSearch);
+
+    return matchesCompany || matchesRole;
+  })
 
   return (
     <div className="container">
@@ -84,8 +93,16 @@ function App() {
 
       <h1 className="dashboard-title">{header}</h1>
 
+      <input 
+        type="text" 
+        placeholder="Search jobs..." 
+        className="search-bar"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
       <div className="job-grid"> 
-      {jobs?.map(job => {
+      {filteredJobs?.map(job => {
           return <JobCard key={job.id} jobData={job} onDelete={deleteJob} onUpdate={updateJob}/>;
       })}
       </div>

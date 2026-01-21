@@ -9,9 +9,9 @@ function JobCard ({ jobData, onDelete, onUpdate}) {
               <span className="role">{jobData.role}</span>
 
               <select 
-                className={`status ${jobData.status.toLowerCase()}`} 
+                className={`status ${(jobData.status || "applied").toLowerCase()}`}
                 onChange={(e) => onUpdate(jobData.id, e.target.value)}
-                value={jobData.status}
+                value={jobData.status || "Applied"}
               >
                 <option>Applied</option>
                 <option>Interviewing</option>

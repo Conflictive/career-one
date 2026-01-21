@@ -50,7 +50,7 @@ def add_job():
     new_job = Job(
         role=data['role'], 
         company=data['company'], 
-        status="Applied",  # Default status until I build the status selector
+        status="Applied", 
         date=date.today(),
         salary=data.get('salary', 'N/A')
     )
@@ -76,6 +76,7 @@ def delete_job(job_id):
 
 @app.route("/api/jobs/<int:job_id>" , methods=['PATCH'])
 def update_job(job_id):
+    """Update a jobs status with the given id, returns update message with status code 200"""
     data = request.json
 
     job_to_update = db.session.get(Job, job_id)
