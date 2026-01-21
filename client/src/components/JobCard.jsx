@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function JobCard ({ jobData, onDelete, onUpdate}) {
     return (
           <div className="job-card">
@@ -6,8 +8,10 @@ function JobCard ({ jobData, onDelete, onUpdate}) {
             </button>
 
             <div className="card-header">
+              <Link className="role-link" to={`/jobs/${jobData.id}`}>
               <span className="role">{jobData.role}</span>
-
+              </Link>
+        
               <select 
                 className={`status ${(jobData.status || "applied").toLowerCase()}`}
                 onChange={(e) => onUpdate(jobData.id, e.target.value)}

@@ -119,3 +119,43 @@ body {
   background-color: #ffebee;
   color: #d32f2f;
 }
+
+.role-link {
+  text-decoration: none; 
+  color: inherit;        
+  display: inline-block; 
+}
+
+.role {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2c3e50; 
+  cursor: pointer;
+  transition: color 0.2s; 
+}
+
+.role-link:hover .role {
+  color: #3498db; 
+  /* text-decoration: underline;  */
+}
+
+/* Error Container */
+.error {
+  background-color: #fee2e2; 
+  color: #dc2626;            
+  border: 1px solid #fecaca; 
+  
+  padding: 1.5rem;          
+  margin: 2rem auto;         
+  max-width: 400px;          
+  border-radius: 8px;       
+  
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.error p {
+  margin: 0;
+  font-size: 1.1rem;
+}
