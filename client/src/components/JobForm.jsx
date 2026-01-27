@@ -19,6 +19,7 @@ function JobForm ({ setJobs, closeModal}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    closeModal();
 
     const jobData = {
       role: formData.role,
@@ -52,7 +53,7 @@ function JobForm ({ setJobs, closeModal}) {
 
 
     return (
-          <Container size="md" mt="md"> 
+          <Container size="xl" mt="md"> 
             <Paper shadow="md" p="xl" withBorder radius="md">
               <form onSubmit={handleSubmit}>
                 
@@ -83,7 +84,7 @@ function JobForm ({ setJobs, closeModal}) {
                     onChange={handleChange}
                   />
                 
-                  <Button type="submit" onClick={closeModal}>
+                  <Button type="submit">
                     Save
                   </Button>
 

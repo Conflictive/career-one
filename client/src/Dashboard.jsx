@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import "./App.css";
 import JobForm from "./components/JobForm";
 import JobCard from "./components/JobCard";
-import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button } from "@mantine/core";
+import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button, ActionIcon } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 
 function Dashboard() {
@@ -94,18 +94,32 @@ function Dashboard() {
   return (
     
     <Container justify="center">
-      <Stack>
+      <Stack align="center">
         <Title order={1} mx="auto">{header}</Title>
 
-        <Modal 
-          opened={opened}   // "Are you visible?" -> Check the 'opened' variable
-          onClose={close}   // "How do I hide?"   -> Run the 'close' function
-          title="Add a Job"
-        >
-          <JobForm setJobs={setJobs} closeModal={close}/>
-        </Modal>
+        <Button onClick={open}>Add Job</Button>
+        
+          <Modal 
+            opened={opened}   
+            onClose={close}  
+            withCloseButton={false}
+            size="auto"
+          >
+            <Group justify="space-between">
+              <Title order={3}>Adding Job....</Title>
+            
+                <ActionIcon 
+                  color="red" 
+                  variant="subtle" 
+                  onClick={close}
+                >
+                  × 
+                </ActionIcon>
+              
+            </Group>
+            <JobForm setJobs={setJobs} closeModal={close}/>
+          </Modal>
 
-        <Group>
           <TextInput
             type="text" 
             placeholder="Search jobs..." 
@@ -116,9 +130,6 @@ function Dashboard() {
             maw={400}      
             mx="auto"      
           />
-
-          <Button onClick={open}>Add Job</Button>
-        </Group>
 
         <SimpleGrid 
           cols={{ base: 1, sm: 2, lg: 3 }} // 1 col on mobile, 2 on tablet, 3 on desktop
