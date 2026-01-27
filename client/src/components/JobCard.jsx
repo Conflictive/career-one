@@ -65,6 +65,10 @@ function JobCard({ jobData, onDelete, onUpdate }) {
             Rejected
           </Menu.Item>
 
+          <Menu.Item onClick={() => onUpdate(jobData.id, "Offer")}>
+            Offer
+          </Menu.Item>
+
         </Menu.Dropdown>
     </Menu>
 

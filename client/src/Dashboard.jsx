@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import "./App.css";
 import JobForm from "./components/JobForm";
 import JobCard from "./components/JobCard";
+import JobStats from "./components/JobStats"
 import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button, ActionIcon } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 
@@ -91,13 +92,28 @@ function Dashboard() {
     return matchesCompany || matchesRole;
   })
 
+  const initialStats = {
+    "interviewing": 0,
+    "applied": 0,
+    "rejected": 0,
+    "offer": 0 
+  }
+
+  const stats = jobs.reduce((acc, job) => {
+    console.log(job.status.toLowerCase())
+    const status = job.status.toLowerCase() || "applied"
+    acc[status]++
+    return acc
+  }, {...initialStats})
+  
   return (
     
     <Container justify="center">
       <Stack align="center">
         <Title order={1} mx="auto">{header}</Title>
 
-        <Button onClick={open}>Add Job</Button>
+        
+        <JobStats stats={stats}/>
         
           <Modal 
             opened={opened}   
@@ -120,16 +136,21 @@ function Dashboard() {
             <JobForm setJobs={setJobs} closeModal={close}/>
           </Modal>
 
-          <TextInput
-            type="text" 
-            placeholder="Search jobs..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+          <Group wrap="no-wrap">
+            <TextInput
+              type="text" 
+              placeholder="Search jobs..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
 
-            w="100%"       
-            maw={400}      
-            mx="auto"      
-          />
+              w="100%"       
+              maw={400}      
+              mx="auto"      
+            />
+
+            <Button onClick={open} w="50%">Add Job</Button>
+            <Button onClick={open} w="50%">Sort</Button>
+          </Group>
 
         <SimpleGrid 
           cols={{ base: 1, sm: 2, lg: 3 }} // 1 col on mobile, 2 on tablet, 3 on desktop

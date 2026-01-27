@@ -20,7 +20,7 @@ def add_job():
     new_job = Job(
         role=data["role"],
         company=data["company"],
-        status="jobs_bplied",
+        status="Applied",
         date=date.today(),
         salary=data.get("salary", "N/A"),
     )
