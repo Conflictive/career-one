@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import "./App.css";
 import JobForm from "./components/JobForm";
 import JobCard from "./components/JobCard";
+import { Container, TextInput, Title, SimpleGrid, Stack } from "@mantine/core";
 
 function Dashboard() {
   const [header, setHeader] = useState("Loading...");
@@ -14,6 +15,7 @@ function Dashboard() {
       try {
         const response = await fetch("/api/jobs");
         const data = await response.json();
+
         setJobs(data);
         setHeader("Jobs Dashboard");
       } catch (error) {
@@ -88,25 +90,40 @@ function Dashboard() {
   })
 
   return (
-    <div className="container">
-      <JobForm setJobs={setJobs} />
+    
+    <Container justify="center">
+      <Stack>
+        <Title order={1} mx="auto">{header}</Title>
+        <JobForm setJobs={setJobs} />
 
-      <h1 className="App-title">{header}</h1>
+        <TextInput
+          type="text" 
+          placeholder="Search jobs..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
 
-      <input 
-        type="text" 
-        placeholder="Search jobs..." 
-        className="search-bar"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+          w="100%"       
+          maw={400}      
+          mx="auto"      
+        />
 
-      <div className="job-grid"> 
-      {filteredJobs?.map(job => {
-          return <JobCard key={job.id} jobData={job} onDelete={deleteJob} onUpdate={updateJob}/>;
-      })}
-      </div>
-    </div>
+        <SimpleGrid 
+          cols={{ base: 1, sm: 2, lg: 3 }} // 1 col on mobile, 2 on tablet, 3 on desktop
+          spacing="lg"                     
+          verticalSpacing="lg"             
+        >
+        {filteredJobs?.map(job => {
+            return <JobCard 
+                      key={job.id} 
+                      jobData={job}
+                      onDelete={deleteJob} 
+                      onUpdate={updateJob}
+                    />;
+        })}
+
+        </SimpleGrid>
+      </Stack>
+    </Container>
   );
 }
 

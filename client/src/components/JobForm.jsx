@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Container, Stack, Title, TextInput, Button, Paper, Group } from '@mantine/core';
 
 function JobForm ({ setJobs }) {
     const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ function JobForm ({ setJobs }) {
     };
 
     try {
-      const response = await fetch("api/jobs", {
+      const response = await fetch("/api/jobs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,37 +52,47 @@ function JobForm ({ setJobs }) {
 
 
     return (
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          name="role" 
-          value={formData.role} 
-          placeholder="Role" 
-          onChange={handleChange}
-        />
-        <br />
+          <Container size="md" mt="md"> 
+            <Paper shadow="md" p="xl" withBorder radius="md">
+              <form onSubmit={handleSubmit}>
+                
+                <Group align="flex-end"> 
+                  
+                  <TextInput
+                    label="Role" 
+                    name="role" 
+                    value={formData.role} 
+                    placeholder="e.g. Backend Engineer" 
+                    onChange={handleChange}
+                    required 
+                  />
+                  
+                  <TextInput
+                    label="Company"
+                    name="company" 
+                    value={formData.company} 
+                    placeholder="e.g. Google" 
+                    onChange={handleChange}
+                  />
+            
+                  <TextInput
+                    label="Salary"
+                    name="salary" 
+                    value={formData.salary} 
+                    placeholder="e.g. £45,000" 
+                    onChange={handleChange}
+                  />
+                
+                  <Button type="submit">
+                    Save
+                  </Button>
 
-        <input 
-          type="text" 
-          name="company" 
-          value={formData.company} 
-          placeholder="Company" 
-          onChange={handleChange}
-        />
-        <br />
+                </Group>
 
-        <input 
-          type="text" 
-          name="salary" 
-          value={formData.salary} 
-          placeholder="Salary" 
-          onChange={handleChange}
-        />
-        <br />
-
-        <button>Save</button>
-      </form>
-    )
+              </form>
+            </Paper>
+          </Container>
+        );
 }
 
 export default JobForm
