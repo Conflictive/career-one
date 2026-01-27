@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Stack, Title, TextInput, Button, Paper, Group } from '@mantine/core';
 
-function JobForm ({ setJobs }) {
+function JobForm ({ setJobs, closeModal}) {
     const [formData, setFormData] = useState({
         role: '',
         company: '',
@@ -83,7 +83,7 @@ function JobForm ({ setJobs }) {
                     onChange={handleChange}
                   />
                 
-                  <Button type="submit">
+                  <Button type="submit" onClick={closeModal}>
                     Save
                   </Button>
 

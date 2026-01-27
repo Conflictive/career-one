@@ -2,12 +2,14 @@ import {useState, useEffect} from "react";
 import "./App.css";
 import JobForm from "./components/JobForm";
 import JobCard from "./components/JobCard";
-import { Container, TextInput, Title, SimpleGrid, Stack } from "@mantine/core";
+import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
 
 function Dashboard() {
   const [header, setHeader] = useState("Loading...");
   const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [opened, { open, close }] = useDisclosure(false);
   
 
   useEffect(() => {
@@ -94,18 +96,29 @@ function Dashboard() {
     <Container justify="center">
       <Stack>
         <Title order={1} mx="auto">{header}</Title>
-        <JobForm setJobs={setJobs} />
 
-        <TextInput
-          type="text" 
-          placeholder="Search jobs..." 
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+        <Modal 
+          opened={opened}   // "Are you visible?" -> Check the 'opened' variable
+          onClose={close}   // "How do I hide?"   -> Run the 'close' function
+          title="Add a Job"
+        >
+          <JobForm setJobs={setJobs} closeModal={close}/>
+        </Modal>
 
-          w="100%"       
-          maw={400}      
-          mx="auto"      
-        />
+        <Group>
+          <TextInput
+            type="text" 
+            placeholder="Search jobs..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+
+            w="100%"       
+            maw={400}      
+            mx="auto"      
+          />
+
+          <Button onClick={open}>Add Job</Button>
+        </Group>
 
         <SimpleGrid 
           cols={{ base: 1, sm: 2, lg: 3 }} // 1 col on mobile, 2 on tablet, 3 on desktop
