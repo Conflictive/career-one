@@ -30,6 +30,13 @@ export function useJobs(searchTerm, setHeader) {
      */
     const deleteJob = async (id) =>  {
         const url = "/api/jobs/" + id;
+
+        const jobToRemove = jobs.find((job) => job.id === id)
+        
+        if (jobToRemove.status === "Offer") {
+            alert("You can't delete an offer!")
+            return
+        }
         
         try {
         const response = await fetch(url, {
@@ -105,5 +112,6 @@ export function useJobs(searchTerm, setHeader) {
       updateJob,
       filteredJobs,
       stats,
+      setJobs
    };
 }

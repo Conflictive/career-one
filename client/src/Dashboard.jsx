@@ -3,7 +3,7 @@ import "./App.css";
 import JobForm from "./components/JobForm";
 import JobCard from "./components/JobCard";
 import JobStats from "./components/JobStats"
-import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button, ActionIcon } from "@mantine/core";
+import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button, ActionIcon, Center } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useJobs } from "./hooks/useJobs";
 
@@ -11,8 +11,10 @@ function Dashboard() {
   const [header, setHeader] = useState("Loading...");
   const [searchTerm, setSearchTerm] = useState("");
   const [opened, { open, close }] = useDisclosure(false);
-  const { stats, filteredJobs, setJobs } = useJobs(searchTerm, setHeader);
+  const { stats, filteredJobs, setJobs, deleteJob, updateJob } = useJobs(searchTerm, setHeader);
   
+  const jobStatus = ["Interviewing", "Applied", "Offer", "Rejected"]
+
   return (
     
     <Container justify="center">
@@ -59,21 +61,31 @@ function Dashboard() {
             <Button onClick={open} w="50%">Sort</Button>
           </Group>
 
-        <SimpleGrid 
-          cols={{ base: 1, sm: 2, lg: 3 }} // 1 col on mobile, 2 on tablet, 3 on desktop
-          spacing="lg"                     
-          verticalSpacing="lg"             
-        >
-        {filteredJobs?.map(job => {
-            return <JobCard 
-                      key={job.id} 
-                      jobData={job}
-                      onDelete={deleteJob} 
-                      onUpdate={updateJob}
-                    />;
-        })}
+      <SimpleGrid cols={4} spacing="lg" verticalSpacing="lg">
+        
+        {jobStatus.map((status) => (
+          
+          <Stack key={status} gap="md">
+            
+            <Title order={3}>{status}</Title>
+            
+              {filteredJobs
+                .filter((job) => job.status?.toLowerCase() === status.toLowerCase())
+                .map((job) => (
+                  <JobCard 
+                    key={job.id} 
+                    jobData={job}
+                    onDelete={deleteJob} 
+                    onUpdate={updateJob}
+                  />
+                ))}
+          </Stack>
+        ))}
 
-        </SimpleGrid>
+      </SimpleGrid>        
+        
+
+        
       </Stack>
     </Container>
   );

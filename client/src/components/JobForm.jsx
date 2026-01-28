@@ -24,7 +24,7 @@ function JobForm ({ setJobs, closeModal}) {
     const jobData = {
       role: formData.role,
       company: formData.company,
-      salary: formData.salary
+      salary: formData.salary,
     };
 
     try {
@@ -41,7 +41,7 @@ function JobForm ({ setJobs, closeModal}) {
       }
 
       const data = await response.json();
-
+      console.log(data)
       setJobs((prevJobs) => [...prevJobs, data]);
       
       setFormData({ role: "", company: "", salary: "" });
