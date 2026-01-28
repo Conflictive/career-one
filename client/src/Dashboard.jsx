@@ -4,107 +4,14 @@ import JobForm from "./components/JobForm";
 import JobCard from "./components/JobCard";
 import JobStats from "./components/JobStats"
 import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button, ActionIcon } from "@mantine/core";
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure } from "@mantine/hooks";
+import { useJobs } from "./hooks/useJobs";
 
 function Dashboard() {
   const [header, setHeader] = useState("Loading...");
-  const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [opened, { open, close }] = useDisclosure(false);
-  
-
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await fetch("/api/jobs");
-        const data = await response.json();
-
-        setJobs(data);
-        setHeader("Jobs Dashboard");
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      }
-  };
-
-    fetchJobs();
-  }, []);
-
-  const deleteJob = async (id) =>  {
-    const url = "/api/jobs/" + id;
-    
-    try {
-      const response = await fetch(url, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-
-      setJobs(prevJobs => prevJobs.filter(job => job.id !== id));
-    } catch (error) {
-      console.error("Error deleting job:", error);
-    }
-  };
-
-  const updateJob = async (id, newStatus) => {
-    const updateData = {
-      status: newStatus
-    };
-
-    const url = "/api/jobs/" + id;
-
-    try {
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateData), 
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-
-      setJobs((prevJobs) => prevJobs.map((job) => {
-        if (job.id === id) {
-          return {...job, status: newStatus};
-        } else {
-          return job;
-        }
-      }));
-    } catch (error) {
-      console.error("Error updating job:", error);
-    }
-  };  
-
-  const filteredJobs = jobs?.filter((job) => {
-    const cleanSearch = searchTerm.toLowerCase();
-
-    const matchesCompany = job.company.toLowerCase().includes(cleanSearch);
-    const matchesRole = job.role.toLowerCase().includes(cleanSearch);
-
-    return matchesCompany || matchesRole;
-  })
-
-  const initialStats = {
-    "interviewing": 0,
-    "applied": 0,
-    "rejected": 0,
-    "offer": 0 
-  }
-
-  const stats = jobs.reduce((acc, job) => {
-    console.log(job.status.toLowerCase())
-    const status = job.status.toLowerCase() || "applied"
-    acc[status]++
-    return acc
-  }, {...initialStats})
+  const { stats, filteredJobs, setJobs } = useJobs(searchTerm, setHeader);
   
   return (
     
