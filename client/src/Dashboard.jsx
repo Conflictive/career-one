@@ -6,6 +6,7 @@ import JobStats from "./components/JobStats"
 import { Container, TextInput, Title, SimpleGrid, Stack, Modal, Group, Button, ActionIcon, Center } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useJobs } from "./hooks/useJobs";
+import KanbanBoard from "./components/KanbanBoard";
 
 function Dashboard() {
   const [header, setHeader] = useState("Loading...");
@@ -13,11 +14,9 @@ function Dashboard() {
   const [opened, { open, close }] = useDisclosure(false);
   const { stats, filteredJobs, setJobs, deleteJob, updateJob } = useJobs(searchTerm, setHeader);
   
-  const jobStatus = ["Interviewing", "Applied", "Offer", "Rejected"]
-
   return (
     
-    <Container justify="center">
+    <Container fluid p="lg">
       <Stack align="center">
         <Title order={1} mx="auto">{header}</Title>
 
@@ -61,29 +60,8 @@ function Dashboard() {
             <Button onClick={open} w="50%">Sort</Button>
           </Group>
 
-      <SimpleGrid cols={4} spacing="lg" verticalSpacing="lg">
-        
-        {jobStatus.map((status) => (
-          
-          <Stack key={status} gap="md">
-            
-            <Title order={3}>{status}</Title>
-            
-              {filteredJobs
-                .filter((job) => job.status?.toLowerCase() === status.toLowerCase())
-                .map((job) => (
-                  <JobCard 
-                    key={job.id} 
-                    jobData={job}
-                    onDelete={deleteJob} 
-                    onUpdate={updateJob}
-                  />
-                ))}
-          </Stack>
-        ))}
-
-      </SimpleGrid>        
-        
+        <KanbanBoard deleteJob={deleteJob} updateJob={updateJob} filteredJobs={filteredJobs}/>
+      
 
         
       </Stack>

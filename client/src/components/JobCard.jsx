@@ -13,7 +13,18 @@ function JobCard({ jobData, onDelete, onUpdate }) {
   const currentStatus = jobData.status || 'Applied';
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card 
+      shadow="sm" 
+      padding="lg" 
+      radius="md" 
+      withBorder 
+      h={180} 
+      display="flex"
+      style={{ 
+        flexDirection: 'column', 
+        justifyContent: 'space-between', 
+      }}
+      >
       <Group justify="space-between" mb="xs">
         <Text 
           component={Link} 
@@ -43,7 +54,11 @@ function JobCard({ jobData, onDelete, onUpdate }) {
             color={statusColors[currentStatus] || 'gray'} 
             variant="light" 
             size="lg"
-            style={{ cursor: 'pointer' }} 
+            style={{ 
+                cursor: 'pointer', 
+                flexShrink: 0,       
+                alignSelf: 'flex-start' 
+            }}
           >
             {currentStatus} ▼
           </Badge>

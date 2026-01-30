@@ -61,6 +61,14 @@ export function useJobs(searchTerm, setHeader) {
         status: newStatus
         };
 
+        setJobs((prevJobs) => prevJobs.map((job) => {
+            if (job.id.toString() == id.toString()) {
+                return {...job, status: newStatus};
+            } else {
+                return job;
+            }
+        }));
+
         const url = "/api/jobs/" + id;
 
         try {
@@ -75,13 +83,7 @@ export function useJobs(searchTerm, setHeader) {
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
 
-        setJobs((prevJobs) => prevJobs.map((job) => {
-            if (job.id === id) {
-                return {...job, status: newStatus};
-            } else {
-                return job;
-            }
-        }));
+        
         } catch (error) {
             console.error("Error updating job:", error);
         }
@@ -98,9 +100,9 @@ export function useJobs(searchTerm, setHeader) {
   })
 
   const stats = jobs.reduce((acc, job) => {
-    console.log(job.status.toLowerCase())
     const status = job.status.toLowerCase() || "applied"
     acc[status]++
+
     return acc
     }, { interviewing: 0, applied: 0, rejected: 0, offer: 0 })
 
