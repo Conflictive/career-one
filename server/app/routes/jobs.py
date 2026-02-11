@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
 from app.models import db, Job as JobModel
 from datetime import date 
-from app.schemas import Job as JobSchema
+from app.schemas import JobUpdate, Job as JobSchema
+
 
 
 jobs_bp = Blueprint("jobs", __name__)
@@ -50,19 +51,22 @@ def delete_job(job_id):
 @jobs_bp.route("/api/jobs/<int:job_id>", methods=["PATCH"])
 def update_job(job_id):
     """Update a jobs status with the given id, returns update message with status code 200"""
-    data = request.json
+    validated_data = JobUpdate(**request.json)
 
     job_to_update = db.session.get(JobModel, job_id)
-    new_status = data.get("status")
+    new_status = validated_data.status
 
     if job_to_update is None:
         return jsonify({"error": "Job not found"}), 404
 
-    job_to_update.status = new_status
+    update_data = validated_data.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(job_to_update, key, value)
 
     db.session.commit()
 
-    return jsonify({"message": "Job status updated successfully"}), 200
+    return jsonify(JobSchema.model_validate(job_to_update).model_dump(mode='json')), 200
 
 
 @jobs_bp.route("/api/jobs/<int:job_id>", methods=["GET"])
