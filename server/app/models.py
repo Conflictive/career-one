@@ -11,4 +11,3 @@ class Job(db.Model):
     status = db.Column(db.String(50), nullable=False)
     creation_date = db.Column(db.Date, default=lambda: date.today())
     salary = db.Column(db.String(50), nullable=False)
-

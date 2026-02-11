@@ -18,14 +18,9 @@ def create_app(config_class=Config):
 
     @app.errorhandler(ValidationError)
     def handle_pydantic_validation_error(e):
-        return jsonify({
-            "error": "Validation Failed",
-            "details": e.errors() 
-        }), 400
+        return jsonify({"error": "Validation Failed", "details": e.errors()}), 400
 
     with app.app_context():
         db.create_all()
-    
+
     return app
-
-

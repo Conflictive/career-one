@@ -15,10 +15,9 @@ class Job(BaseModel):
     @classmethod
     def normalise_status(cls, v: str) -> str:
         return v.lower()
-    
-    model_config = {
-        "from_attributes": True
-    }
+
+    model_config = {"from_attributes": True}
+
 
 class JobUpdate(BaseModel):
     role: Optional[str] = None
