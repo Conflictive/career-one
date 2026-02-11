@@ -17,21 +17,19 @@ def get_jobs():
 @jobs_bp.route("/api/jobs", methods=["POST"])
 def add_job():
     """Create a new job object and add it the the database, returns the job object with status code 201"""
-    data = request.json
-    validation = JobSchema(**request.json)
-    print(type(validation.creation_date))
-    new_job = JobModel(
-        role=data["role"],
-        company=data["company"],
-        status="Applied",
-        creation_date=date.today(),
-        salary=data.get("salary", "N/A"),
-    )
+    
+    # Pydantic validates the incoming data from the frontend 
+    validated_data = JobSchema(**request.json)
 
+    # Use Pydantic object to create an SQLAlchemy object
+    new_job = JobModel(**validated_data.model_dump())
+
+    # Save new job to DB
     db.session.add(new_job)
     db.session.commit()
 
-    return jsonify(new_job.to_json()), 201
+    # SQLAlchemy object -> Pydantic object -> JSON string for React
+    return jsonify(JobSchema.model_validate(new_job).model_dump(mode='json')), 201
 
 
 @jobs_bp.route("/api/jobs/<int:job_id>", methods=["DELETE"])

@@ -12,14 +12,3 @@ class Job(db.Model):
     creation_date = db.Column(db.Date, default=lambda: date.today())
     salary = db.Column(db.String(50), nullable=False)
 
-    # Jsonify cannot handle the internal state of an SQLAlchemy object
-    # so it needs to converted into a dictionary first
-    def to_json(self):
-        return {
-            "id": self.id,
-            "role": self.role,
-            "company": self.company,
-            "status": self.status,
-            "creation_date": self.creation_date.isoformat() if self.creation_date else None,
-            "salary": self.salary,
-        }
