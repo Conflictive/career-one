@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 
 db = SQLAlchemy()
 
@@ -8,7 +9,7 @@ class Job(db.Model):
     role = db.Column(db.String(100), nullable=False)
     company = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.String(50), nullable=False)
+    creation_date = db.Column(db.Date, default=lambda: date.today())
     salary = db.Column(db.String(50), nullable=False)
 
     # Jsonify cannot handle the internal state of an SQLAlchemy object
@@ -19,6 +20,6 @@ class Job(db.Model):
             "role": self.role,
             "company": self.company,
             "status": self.status,
-            "date": self.date,
+            "creation_date": self.creation_date.isoformat() if self.creation_date else None,
             "salary": self.salary,
         }
