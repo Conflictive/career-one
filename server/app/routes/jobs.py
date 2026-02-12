@@ -1,16 +1,15 @@
 from flask import Blueprint, jsonify, request
 from app.models import db, Job as JobModel
-from datetime import date
 from app.schemas import JobUpdate, Job as JobSchema
 
 jobs_bp = Blueprint("jobs", __name__)
 
-
 @jobs_bp.route("/api/jobs", methods=["GET"])
 def get_jobs():
     """Fetch all jobs from the database and return as a list."""
+
     jobs = JobModel.query.all()
-    
+
     return jsonify(
         [JobSchema.model_validate(job).model_dump(mode="json") for job in jobs]
     )
