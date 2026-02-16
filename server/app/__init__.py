@@ -3,14 +3,22 @@ from flask_cors import CORS
 from config import Config
 from app.models import db
 from pydantic import ValidationError
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
-
+    
     db.init_app(app)
-    CORS(app)
+    
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:3000", "https://*.vercel.app"]
+        }
+    })
 
     from app.routes.jobs import jobs_bp
 
