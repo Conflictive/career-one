@@ -3,7 +3,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd server && pip install psycopg2-binary && python run.py",
+    "startCommand": "cd server && pip install psycopg2-binary python-dotenv && python run.py",
     "restartPolicyType": "ON_FAILURE"
   }
 }
