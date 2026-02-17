@@ -14,11 +14,13 @@ def create_app(config_class=Config):
     
     db.init_app(app)
     
-    CORS(app, resources={
-        r"/api/*": {
-            "origins": ["http://localhost:3000", "https://*.vercel.app"]
-        }
-    })
+    CORS(app)
+    
+    # CORS(app, resources={
+    #     r"/api/*": {
+    #         "origins": ["http://localhost:3000", "https://*.vercel.app", "https://career-one-pi.vercel.app"]
+    #     }
+    # })
 
     from app.routes.jobs import jobs_bp
 
