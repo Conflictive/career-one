@@ -1,5 +1,7 @@
 import { useState, useEffect} from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 export function useJobs(searchTerm, setHeader) {
 
     // 1. STATE
@@ -9,7 +11,7 @@ export function useJobs(searchTerm, setHeader) {
     useEffect(() => {
     const fetchJobs = async () => {
             try {
-                const response = await fetch("/api/jobs");
+                const response = await fetch(`${API_URL}/api/jobs`);
                 const data = await response.json();
 
                 setJobs(data);
@@ -29,7 +31,7 @@ export function useJobs(searchTerm, setHeader) {
      * @param {string} id - The unique ID of the job
      */
     const deleteJob = async (id) =>  {
-        const url = "/api/jobs/" + id;
+        const url = `${API_URL}/api/jobs/${id}`;
 
         const jobToRemove = jobs.find((job) => job.id === id)
         
@@ -69,7 +71,7 @@ export function useJobs(searchTerm, setHeader) {
             }
         }));
 
-        const url = "/api/jobs/" + id;
+        const url = `${API_URL}/api/jobs/${id}`;
 
         try {
             const response = await fetch(url, {
