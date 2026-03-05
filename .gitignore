@@ -2,6 +2,8 @@
 server/venv/
 **/__pycache__/
 .env
+/instance/
+*.db
 
 # Node / Frontend
 client/node_modules/
