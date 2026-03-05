@@ -2,10 +2,18 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+interface Job {
+    id: number;
+    role: string;
+    company: string;
+    status: string;
+    salary: string;
+}
+
 function JobDetails () {
     const { id } = useParams();
-    const [job, setJob] = useState(null);
-    const [error, setError] = useState(null);
+    const [job, setJob] = useState<Job | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const url = "/api/jobs/" + id;
